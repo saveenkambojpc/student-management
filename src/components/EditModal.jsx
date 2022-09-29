@@ -53,7 +53,9 @@ const EditModal = ({ student }) => {
       ></ion-icon>
 
       <Modal show={open} size="5xl" popup={true} onClose={handleClose}>
-        <Modal.Header />
+      <Modal.Header>
+            Edit a Student
+            </Modal.Header>
         <Modal.Body>
           <form className="text-center" onSubmit={updateData}>
             <div className="mt-5 flex flex-wrap justify-between">

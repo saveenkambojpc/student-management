@@ -13,20 +13,23 @@ import { collection, addDoc } from "firebase/firestore";
 const AddStudent = () => {
   const [data, setData] = useState({});
   const auth = getAuth();
+  const [success, setSuccess] = useState(false);
 
   const collectionRef = collection(database, "students");
 
   const onChange = (event) => {
     let newInput = { [event.target.name]: event.target.value };
     setData({ ...data, ...newInput });
-    console.log(data);
   };
 
   const addData = (e) => {
     e.preventDefault();
     addDoc(collectionRef, data)
       .then(() => {
-        alert("Data added");
+        setSuccess(true);
+        setInterval(() => {
+          setSuccess(false);
+        }, 5000);
       })
       .catch((error) => {
         alert(error.message);
@@ -34,10 +37,10 @@ const AddStudent = () => {
   };
 
   return (
-    <div className=" w-full border md:px-10">
+    <div className=" w-full  md:pr-5 pr-0 mx-">
       <div className="row flex justify-between md:px-2">
-        <h5>Add Student</h5>
-        <span>25 July 2020 16:10</span>
+        <h5 className="text-lg font-semibold">Add Student</h5>
+        <span className="font-semibold">25 July 2020 16:10</span>
       </div>
 
       <form className="form   " onSubmit={addData}>
@@ -80,9 +83,10 @@ const AddStudent = () => {
               name="class"
               required
               id=""
+              defaultValue={"default"}
               className="text-[#6b728f] focus:ring-red-500 focus:border-red-500 border-gray-300 rounded w-full"
             >
-              <option value="" disabled selected>
+              <option value="default" disabled>
                 Select Class
               </option>
 
@@ -105,10 +109,11 @@ const AddStudent = () => {
               onChange={(e) => onChange(e)}
               name="division"
               id=""
+              defaultValue={"default"}
               required
               className="text-[#6b728f] focus:ring-red-500 focus:border-red-500 border-gray-300 rounded w-full"
             >
-              <option value="" disabled selected>
+              <option value="default" disabled>
                 Select Division
               </option>
               <option>A</option>
@@ -126,8 +131,7 @@ const AddStudent = () => {
               type="number"
               name="rollno"
               id=""
-              onInput={(e) => e.target.value = e.target.value.slice(0, 4)}
-             
+              onInput={(e) => (e.target.value = e.target.value.slice(0, 4))}
               className="border-gray-300 rounded w-full focus:ring-red-500 focus:border-red-500"
               placeholder="Enter Roll Number in Digits"
             />
@@ -189,16 +193,27 @@ const AddStudent = () => {
             />
           </div>
         </div>
-        <div className="mt-5 flex flex-wrap justify-between">
+        <div className="mt-5 flex flex-wrap ">
           <div className="form-item md:w-1/3 w-full mb-4 md:px-2 ">
             <button
               type="submit"
-              className="w-full bg-red-500 py-2 rounded text-white text-semibold hover:bg-red-700"
+              className="w-full bg-red-500 py-2 rounded text-white font-semibold hover:bg-red-700"
               value=""
             >
               Add Data
             </button>
           </div>
+
+          {success && (
+            <div className="form-item md:w-1/3 w-full mb-4 md:px-2 ">
+              <div
+                className="w-full text-red-500 uppercase font-semibold text-center py-2  "
+                value=""
+              >
+                Successfull Added
+              </div>
+            </div>
+          )}
         </div>
       </form>
     </div>

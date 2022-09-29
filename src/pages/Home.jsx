@@ -4,23 +4,24 @@ import AddStudent from "./AddStudent";
 import Sidebar from "../components/Sidebar";
 import { useProfile } from "../context/profile.context";
 import ManageStudent from "./ManageStudent";
+import LogoutModal from "../components/LogoutModal";
 
 export default function Home() {
 
-  const {handleSignout} = useProfile()
+  
+
 
   
-  // window.location = "/addstudent"
   return (
     <div>
-      <h3>Home Page</h3>
-      <button onClick={handleSignout}>Signout</button>
-      
-      <div className="main flex">
+    
+
+      <div className="main md:flex md:mt-20">
         <Sidebar />
+        
 
         <Route exact  path="/">
-          <AddStudent />
+          <AddStudent  />
         </Route>
 
         <Route exact  path="/addstudent">

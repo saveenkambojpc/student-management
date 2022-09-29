@@ -7,6 +7,8 @@ export default function PrivateRoute({ children, ...routeProps }) {
 
   const {profile} = useProfile();
 
+  console.log('profile is ', profile)
+
 
   if (!profile) {
     return <Redirect to="/login" />;

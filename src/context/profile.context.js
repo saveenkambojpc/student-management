@@ -14,6 +14,7 @@ export function ProfileProvider({ children }) {
       // Sign-out successful.
     }).catch((error) => {
       // An error happened.
+      alert(error.message)
     });
   }
 

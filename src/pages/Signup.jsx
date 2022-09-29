@@ -5,6 +5,7 @@ import { app } from "../misc/firebaseConfig";
 
 export default function Signup() {
   const [data, setData] = useState({});
+  const [success,setSuccess] = useState(false)
   const auth = getAuth();
 
   const handleInput = (event) => {
@@ -16,22 +17,19 @@ export default function Signup() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(data.email,data.password)
+    e.preventDefault();
+    console.log(data.email, data.password);
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user)
-        console.log("Successfully created a new user")
-        
-        // ...
+        window.location = '/login'
       })
       .catch((error) => {
-        console.log(error)
+        alert(error.message);
         // ..
       });
   };
+
+ 
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900 md:my-10 ">
@@ -41,7 +39,7 @@ export default function Signup() {
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
         >
           <img
-            className="w-8 h-8 mr-2"
+            className="w-8 h-8 mr-2 hue-rotate-[150deg]"
             src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
             alt="logo"
           />
@@ -64,7 +62,7 @@ export default function Signup() {
                   type="email"
                   name="email"
                   id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-red-600 focus:border-red-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
                   placeholder="name@company.com"
                   required=""
                   onChange={(event) => handleInput(event)}
@@ -82,7 +80,7 @@ export default function Signup() {
                   name="password"
                   id="password"
                   placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-red-600 focus:border-red-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
                   required=""
                   onChange={(event) => handleInput(event)}
                 />
@@ -90,8 +88,7 @@ export default function Signup() {
 
               <button
                 onClick={handleSubmit}
-                
-                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
               >
                 Create an account
               </button>
@@ -99,7 +96,7 @@ export default function Signup() {
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  className="font-medium text-red-600 hover:underline dark:text-red-500"
                 >
                   Login here
                 </Link>
