@@ -21,7 +21,7 @@ export default function Login() {
         // Signed in
         const user = userCredential.user;
         console.log(user)
-        window.location = '/';
+        window.location = '/addstudent';
         
         // ...
       })

@@ -20,13 +20,11 @@ export function ProfileProvider({ children }) {
 
 
   useEffect(() => {
-    console.log("inside profile context")
     const authUnsub = onAuthStateChanged(auth, (user) => {
       if (user) {
 
         const uid = user.uid;
         setProfile(true)
-        console.log("logged in")
         // ...
       } else {
         setProfile(false)
