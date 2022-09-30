@@ -2,12 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useModalState } from "../misc/custom-hooks";
 import { Modal, Button } from "flowbite-react";
 
-import { doc, updateDoc } from "firebase/firestore";
+
+// import { doc, updateDoc } from "firebase/firestore";
+
+import {  ref,  update } from "firebase/database";
+
 import { database } from "../misc/firebaseConfig";
 
 const EditModal = ({ student }) => {
   const { open, handleOpen, handleClose } = useModalState();
   const [data, setData] = useState({});
+
 
   useEffect(() => {
     setData(student);
@@ -32,18 +37,15 @@ const EditModal = ({ student }) => {
     setData({ ...data, ...newInput });
   };
 
-  const updateData = (e) => {
-    console.log("Update is called");
+
+  const updateData = (e) =>{
     e.preventDefault()
-    const docToUpdate = doc(database, "students", student.id);
-    updateDoc(docToUpdate, data)
-      .then(() => {
-        handleClose()
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  };
+
+    const updates = {};
+    updates['/students/' + data.id] = data;
+  
+    return update(ref(database), updates).then(()=>handleClose());
+  }
   return (
     <>
       <ion-icon
@@ -100,12 +102,10 @@ const EditModal = ({ student }) => {
                   name="class"
                   required
                   id=""
-                  value={student.class}
+                  value={data.class}
                   className="text-[#6b728f] focus:ring-red-500 focus:border-red-500 border-gray-300 rounded w-full"
                 >
-                  <option value="" disabled >
-                    Select Class
-                  </option>
+                  
 
                   <option>1</option>
                   <option>2</option>
@@ -130,9 +130,6 @@ const EditModal = ({ student }) => {
                   className="text-[#6b728f] focus:ring-red-500 focus:border-red-500 border-gray-300 rounded w-full"
                   value={division}
                 >
-                  <option value="" disabled>
-                    Select Division
-                  </option>
                   <option>A</option>
                   <option>B</option>
                   <option>C</option>

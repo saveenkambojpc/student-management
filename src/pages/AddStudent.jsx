@@ -8,31 +8,40 @@ import {
 } from "firebase/auth";
 
 // Firebase Database
-import { collection, addDoc } from "firebase/firestore";
+// import { collection, addDoc } from "firebase/firestore";
+
+// Realtime Database
+import { ref, set,push,child } from "firebase/database";
 
 const AddStudent = () => {
   const [data, setData] = useState({});
   const auth = getAuth();
   const [success, setSuccess] = useState(false);
 
-  const collectionRef = collection(database, "students");
+  // const collectionRef = collection(database, "students"); //firestore
 
   const onChange = (event) => {
     let newInput = { [event.target.name]: event.target.value };
     setData({ ...data, ...newInput });
   };
 
-  const addData = (e) => {
+
+  const writeStudentData = (e) => {
     e.preventDefault();
-    addDoc(collectionRef, data)
+
+    // Get a key for a new Post.
+    const uniquekey = push(child(ref(database), "students")).key;
+    const reference = ref(database, "students/" + uniquekey); //realtime
+
+    set(reference, data)
       .then(() => {
         setSuccess(true);
         setInterval(() => {
           setSuccess(false);
         }, 5000);
       })
-      .catch((error) => {
-        alert(error.message);
+      .catch((err) => {
+        alert(err.message);
       });
   };
 
@@ -43,7 +52,7 @@ const AddStudent = () => {
         <span className="font-semibold">25 July 2020 16:10</span>
       </div>
 
-      <form className="form   " onSubmit={addData}>
+      <form className="form   " onSubmit={writeStudentData}>
         <div className="mt-5 flex flex-wrap justify-between">
           <div className="form-item md:w-1/3 w-full mb-4 md:px-2">
             <input

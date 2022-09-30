@@ -1,46 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { app, database } from "../misc/firebaseConfig";
 import "../style/ManageStudent.style.css";
-import { Modal, Button, ButtonToolbar, Placeholder } from "rsuite";
-import { useModalState } from "../misc/custom-hooks";
-
-import { collection, getDocs } from "firebase/firestore";
+// import { collection, getDocs } from "firebase/firestore";
 import DeleteModal from "../components/DeleteModal";
 import EditModal from "../components/EditModal";
 import ViewModal from "../components/ViewModal";
 
+import { ref, onValue } from "firebase/database";
+
 const ManageStudent = () => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true)
-  const collectionRef = collection(database, "students");
-  const { open, handleOpen, handleClose } = useModalState();
+  const [loading, setLoading] = useState(true);
 
-  // Fetch Student from db
   const getData = () => {
-
-    getDocs(collectionRef)
-      .then((res) => {
-        const data = res.docs.map((item) => {
-          return { ...item.data(), id: item.id };
+    const Ref = ref(database, "students/");
+    onValue(Ref, (snapshot) => {
+      const res = snapshot.val();
+      if (res) {
+        const dat = Object.keys(res).map((item) => {
+          return { ...res[item], id: item };
         });
-        setData(data);
-        setLoading(false)
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
+        setData(dat);
+      } else {
+        setData([]);
+      }
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
     getData();
-  }, [data]);
-
+  }, []);
 
   const renderSpiner = () => {
     return (
-      <div class=" w-full flex justify-center mt-20" role="status">
+      <div className=" w-full flex justify-center mt-20" role="status">
         <svg
-          class="inline mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
+          className="inline mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -54,14 +50,10 @@ const ManageStudent = () => {
             fill="currentFill"
           />
         </svg>
-        <span class="sr-only">Loading...</span>
+        <span className="sr-only">Loading...</span>
       </div>
     );
   };
-
-
-  
- 
 
   return (
     <div className=" w-full md:pr-5 px-1">
@@ -71,48 +63,51 @@ const ManageStudent = () => {
       </div>
       {loading && renderSpiner()}
 
-      {!loading &&data.length == 0 && <div class="text-center mt-10">Nothing to Show. Please first add student ...</div>}
-     
+      {!loading && data.length == 0 && (
+        <div className="text-center mt-10">
+          Nothing to Show. Please first add student ...
+        </div>
+      )}
 
-      {!loading && data.length > 0 &&
-      <div id="table">
-        <table className="w-full mt-5 ">
-          <thead>
-            <tr className="md:px-10 px-2  py-2 rounded-t flex items-center text-left justify-start font-semibold bg-red-500 text-white">
-              <th className="w-1/4">Name</th>
-              <th className="w-1/4">Class</th>
-              <th className="w-1/4">Roll No.</th>
-              <th className="w-1/4 text-end">View/Edit/Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((student, i) => {
-              return (
-                <tr
-                  key={student.id}
-                  className="student-item md:px-10 px-2  flex justify-between  py-2"
-                >
-                  <td className="md:w-1/4">
-                    {student.firstname} {student.lastname}
-                  </td>
-                  <td className="md:w-1/4">
-                    {student.class}-{student.division}
-                  </td>
-                  <td className="md:w-1/4">{student.rollno}</td>
-                  <td className="md:w-1/4  flex justify-end md:space-x-6 space-x-3  text-2xl text-red-500">
-                    <ViewModal student={student} />
+      {!loading && data.length > 0 && (
+        <div id="table">
+          <table className="w-full mt-5 ">
+            <thead>
+              <tr className="md:px-10 px-2  py-2 rounded-t flex items-center text-left justify-start font-semibold bg-red-500 text-white">
+                <th className="w-1/4">Name</th>
+                <th className="w-1/4">Class</th>
+                <th className="w-1/4">Roll No.</th>
+                <th className="w-1/4 text-end">View/Edit/Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((student, i) => {
+                return (
+                  <tr
+                    key={student.id}
+                    className="student-item md:px-10 px-2  flex justify-between  py-2"
+                  >
+                    <td className="md:w-1/4">
+                      {student.firstname} {student.lastname}
+                    </td>
+                    <td className="md:w-1/4">
+                      {student.class}-{student.division}
+                    </td>
+                    <td className="md:w-1/4">{student.rollno}</td>
+                    <td className="md:w-1/4  flex justify-end md:space-x-6 space-x-3  text-2xl text-red-500">
+                      <ViewModal student={student} />
 
-                    <EditModal student={student} />
+                      <EditModal student={student} />
 
-                    <DeleteModal id={student.id} />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      }
+                      <DeleteModal id={student.id} />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

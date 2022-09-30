@@ -3,25 +3,27 @@ import { useModalState } from "../misc/custom-hooks";
 import { Modal, Button } from "flowbite-react";
 
 
-import { doc, deleteDoc,  } from "firebase/firestore";
+// import { doc, deleteDoc,  } from "firebase/firestore";
+// import { database } from "../misc/firebaseConfig";
+
+
+import {  ref, remove } from "firebase/database";
 import { database } from "../misc/firebaseConfig";
 
 const DeleteModal = ({id}) => {
   const { open, handleOpen, handleClose } = useModalState();
 
 
-  const deleteData = (e) => {
-    console.log("Update is called");
+
+  const deleteData = e =>{
     e.preventDefault()
-    const docToDelete = doc(database, "students", id);
-    deleteDoc(docToDelete)
-      .then(() => {
-        handleClose()
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  };
+    console.log("Delete Data called")
+    remove(ref(database, "students/" + id))
+    .then(()=>{
+      handleClose()
+    })
+
+  }
   return (
     <>
       <ion-icon
