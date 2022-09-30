@@ -17,7 +17,6 @@ const DeleteModal = ({id}) => {
 
   const deleteData = e =>{
     e.preventDefault()
-    console.log("Delete Data called")
     remove(ref(database, "students/" + id))
     .then(()=>{
       handleClose()

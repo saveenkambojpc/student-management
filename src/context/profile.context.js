@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect,  useState } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 export const profileContext = createContext();
@@ -6,6 +6,9 @@ export const profileContext = createContext();
 export function ProfileProvider({ children }) {
 
   const [profile, setProfile] = useState(true);
+
+  const [profileDetails, setProfileDetails] = useState({})
+  
 
   const auth = getAuth();
 
@@ -20,12 +23,15 @@ export function ProfileProvider({ children }) {
 
 
 
+
+
+
   useEffect(() => {
     const authUnsub = onAuthStateChanged(auth, (user) => {
       if (user) {
 
-        const uid = user.uid;
         setProfile(true)
+        setProfileDetails(user)
         // ...
       } else {
         setProfile(false)
@@ -36,8 +42,8 @@ export function ProfileProvider({ children }) {
     return () => {
       authUnsub();
     }
-  }, [])
-  const value = { profile, signoutHandle }
+  }, [auth])
+  const value = { profile, signoutHandle, profileDetails }
 
   return (<profileContext.Provider value={value}>
     {children}

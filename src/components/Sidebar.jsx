@@ -5,7 +5,7 @@ import LogoutModal from "./LogoutModal";
 const Sidebar = () => {
   return (
     <>
-      <aside className="md:w-64 my-3" aria-label="Sidebar">
+      <aside className="md:w-80 md:my-3  md:pt-5" aria-label="Sidebar">
         <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
           <ul className="space-y-2 ">
             <li>
