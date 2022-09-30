@@ -46,13 +46,13 @@ const AddStudent = () => {
   };
 
   return (
-    <div className=" w-full  md:pr-5 pr-0 mx-">
-      <div className="row flex justify-between md:px-2">
+    <div className=" w-full  md:pr-5 pr-0 ">
+      <div className="row flex justify-between px-3 md:px-2">
         <h5 className="text-lg font-semibold">Add Student</h5>
         <span className="font-semibold">25 July 2020 16:10</span>
       </div>
 
-      <form className="form   " onSubmit={writeStudentData}>
+      <form className="form  px-3 md:px-0 " onSubmit={writeStudentData}>
         <div className="mt-5 flex flex-wrap justify-between">
           <div className="form-item md:w-1/3 w-full mb-4 md:px-2">
             <input

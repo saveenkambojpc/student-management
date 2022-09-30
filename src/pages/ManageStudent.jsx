@@ -56,7 +56,7 @@ const ManageStudent = () => {
   };
 
   return (
-    <div className=" w-full md:pr-5 px-1">
+    <div className=" w-full md:pr-5 px-3">
       <div className="font-semibold row flex justify-between">
         <h5 className="text-lg">Manage Student</h5>
         <span>25 July 2020 16:10</span>
